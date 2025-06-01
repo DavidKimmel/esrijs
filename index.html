@@ -1,12 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Hello, world!</title>
+  <title>Lab 1 GEOG 578</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="" />
+  <!-- access to libraries -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.25/"></script>
+
+  <!-- Full Screen Map modules-->
+  <script>  
+    require([
+     "esri/config",
+     "esri/Map",
+     "esri/views/MapView"
+    ], function(esriConfig, Map, MapView) {   
+    
+      esriConfig.apiKey = "YAAPTxy8BH1VEsoebNVZXo8HurEwEJiPsJAv6XK5APCcuFpZEmTCdTdSU9XMQXYBgfL9c5UnZrY4R2UdHgVrW8LfqDFKnjefPQr9XO0pMlE2S9osFC4vlxQEcDC2L-rbRhvnh3cGFmfknrnTY3XSIHKqUu1aHDnbMm61c0aME06Eg9u_NwfzhPyWlPsZlxkyOWLAtootixnskdcZY0pddnIjDLJ19HPMO7YoJRFfo-wFMnrXD59hI_LVwr_BLfWo0dbk7AT1_nGwi5c7JOUR_API_KEY";
+      const map = new Map({ 
+        basemap: "streets" // Basemap layer service 
+      }); 
+    
+      const view = new MapView({
+        map: map,
+        center: [-97.7431, 30.2672], // Longitude, latitude
+        zoom: 13, // Zoom level
+        container: "viewDiv" // Div element
+      });
+    });  
+  </script>
+
+  <!-- css to make a full screen map -->
+  <style>  
+    html,
+    body,  
+    #viewDiv {  
+      padding: 0;  
+      margin: 0;  
+      height: 100%;  
+      width: 100%;  
+    }  
+  </style> 
+
 </head>
 <body>
-  <h1>Hello, world! I am using Git!</h1>
+  <div id="viewDiv"></div> 
 </body>
 </html>
