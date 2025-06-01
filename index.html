@@ -4,60 +4,66 @@
   <title>Lab 1 GEOG 578</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="" />
+  <meta name="description" content="Lab 1 GEOG 578" />
 
   <!-- access to libraries -->
   <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.25/"></script>
 
   <!-- Full Screen Map modules-->
-  <script>  
+  <script>
     require([
       "esri/config",
       "esri/Map",
       "esri/views/MapView",
+      "esri/Basemap",
       "esri/widgets/BasemapGallery",
       "esri/widgets/Expand",
-      "esri/portal/Portal",
-      "esri/widgets/BasemapGallery/support/PortalBasemapsSource"
+      "esri/widgets/Locate",
+      "esri/widgets/Search"
     ], function(
-      esriConfig, 
-      Map, 
-      MapView, 
-      BasemapGallery, 
+      esriConfig,
+      Map,
+      MapView,
+      Basemap,
+      BasemapGallery,
       Expand,
-      Portal,
-      PortalBasemapsSource
-    ) {   
-    
-      esriConfig.apiKey = "YAAPTxy8BH1VEsoebNVZXo8HurEwEJiPsJAv6XK5APCcuFpZEmTCdTdSU9XMQXYBgfL9c5UnZrY4R2UdHgVrW8LfqDFKnjefPQr9XO0pMlE2S9osFC4vlxQEcDC2L-rbRhvnh3cGFmfknrnTY3XSIHKqUu1aHDnbMm61c0aME06Eg9u_NwfzhPyWlPsZlxkyOWLAtootixnskdcZY0pddnIjDLJ19HPMO7YoJRFfo-wFMnrXD59hI_LVwr_BLfWo0dbk7AT1_nGwi5c7JOUR_API_KEY";
-      
-      const map = new Map({ 
-        basemap: "topo" // Basemap layer service 
-      }); 
-    
+      Locate,
+      Search
+    ) {
+
+      esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurEwEJiPsJAv6XK5APCcuFpZEmTCdTdSU9XMQXYBgfL9c5UnZrY4R2UdHgVrW8LfqDFKnjefPQr9XO0pMlE2S9osFC4vlxQEcDC2L-rbRhvnh3cGFmfknrnTY3XSIHKqUu1aHDnbMm61c0aME06Eg9u_NwfzhPyWlPsZlxkyOWLAtootixnskdcZY0pddnIjDLJ19HPMO7YoJRFfo-wFMnrXD59hI_LVwr_BLfWo0dbk7AT1_nGwi5c7J";
+
+      // create the Map
+      const map = new Map({
+        basemap: "topo-vector"
+      });
+
+      // create the MapView
       const view = new MapView({
         map: map,
-        center: [16.4433, 43.17242], // Longitude, latitude
-        zoom: 15, // Zoom level
-        container: "viewDiv" // Div element
+        center: [16.4433, 43.17242], //Split, Croatia.
+        zoom: 15,
+        container: "viewDiv"
       });
+      
+      // ---------------------------------------------> define custom basemaps collection
+      // const customSource = [
+      //   Basemap.fromId("topo-vector"),
+      //   Basemap.fromId("hybrid"),
+      //   Basemap.fromId("streets-vector"),
+      //   Basemap.fromId("dark-gray-vector")
+      // ];
+      // ---------------------------------------------> 
 
-      // Create Portal and PortalBasemapsSource so the gallery has items
-      const portal = new Portal({
-        url: "https://www.arcgis.com"
-      });
-      const portalSource = new PortalBasemapsSource({
-        portal: portal
-      });
 
-      // BaseMap Gallery widget
-      let basemapGallery = new BasemapGallery({
+      // BasemapGallery widget
+      const basemapGallery = new BasemapGallery({
         view: view,
-        source: portalSource
+        // source: customSource ------------------------> References custom source 
       });
 
-      // Expand wrapper
+      // Expand wrapper for BasemapGallery
       const bgExpand = new Expand({
         view: view,
         content: basemapGallery,
@@ -67,23 +73,42 @@
       });
       view.ui.add(bgExpand, "top-right");
 
-    });  
+      // Locate widget
+      const locateWidget = new Locate({
+        view: view,
+        useHeadingEnabled: false,
+        goToOverride: (view, options) => {
+          options.target.scale = 5000;
+          return view.goTo(options.target);
+        }
+      });
+      view.ui.add(locateWidget, "top-left");
+
+      // Search widget
+      const searchWidget = new Search({
+        view: view,
+        allPlaceholder: "Search address or place",
+        includeDefaultSources: true
+      });
+      view.ui.add(searchWidget, "top-right");
+
+    });
   </script>
 
   <!-- css to make a full screen map -->
-  <style>  
+  <style>
     html,
-    body,  
-    #viewDiv {  
-      padding: 0;  
-      margin: 0;  
-      height: 100%;  
-      width: 100%;  
-    }  
-  </style> 
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
 
 </head>
 <body>
-  <div id="viewDiv"></div> 
+  <div id="viewDiv"></div>
 </body>
 </html>
